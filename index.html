@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 주량 MBTI 테스트</title>
+    <meta name="description" content="당신의 술자리 성향을 알아보는 재미있는 MBTI 테스트">
+    
+    <!-- OG Tags -->
+    <meta property="og:title" content="나의 주량 MBTI 테스트">
+    <meta property="og:description" content="당신의 술자리 성향을 알아보는 재미있는 MBTI 테스트">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/4F46E5/FFFFFF?text=%EC%A3%BC%EB%9F%89+MBTI">
+    <meta property="og:url" content="">
+    <meta property="og:site_name" content="주량 MBTI 테스트">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="나의 주량 MBTI 테스트">
+    <meta name="twitter:description" content="당신의 술자리 성향을 알아보는 재미있는 MBTI 테스트">
+    <meta name="twitter:image" content="https://via.placeholder.com/1200x630/4F46E5/FFFFFF?text=%EC%A3%BC%EB%9F%89+MBTI">
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Start Screen -->
+        <div id="startScreen" class="text-center">
+            <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    🍺 나의 주량 MBTI 테스트
+                </h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    당신의 술자리 성향을 알아보는<br>재미있는 테스트입니다
+                </p>
+                <button 
+                    id="startBtn" 
+                    class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold py-4 px-8 rounded-xl text-lg hover:from-purple-600 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg"
+                >
+                    테스트 시작하기
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="hidden">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                <!-- Progress Bar -->
+                <div class="mb-6">
+                    <div class="flex justify-between text-sm text-gray-600 mb-2">
+                        <span id="progressText">질문 1 / 10</span>
+                        <span id="progressPercent">10%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div 
+                            id="progressBar" 
+                            class="bg-gradient-to-r from-purple-500 to-indigo-600 h-3 rounded-full transition-all duration-300"
+                            style="width: 10%"
+                        ></div>
+                    </div>
+                </div>
+
+                <!-- Question -->
+                <h2 id="questionText" class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">
+                    질문이 여기에 표시됩니다
+                </h2>
+
+                <!-- Choices -->
+                <div id="choicesContainer" class="space-y-4">
+                    <!-- Choices will be injected here by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="hidden">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 text-center">
+                <div id="resultContent">
+                    <!-- Result will be injected here by JS -->
+                </div>
+                
+                <div class="mt-8 space-y-4">
+                    <button 
+                        id="restartBtn" 
+                        class="bg-gray-500 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-600 transition-all w-full md:w-auto"
+                    >
+                        다시하기
+                    </button>
+                    <button 
+                        id="shareBtn" 
+                        class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold py-3 px-6 rounded-xl hover:from-purple-600 hover:to-indigo-700 transition-all w-full md:w-auto md:ml-4"
+                    >
+                        결과 공유하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
