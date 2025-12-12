@@ -169,6 +169,8 @@ let scores = {
   J: 0, P: 0
 };
 
+const MORE_TESTS_URL = 'https://funnyfunny.cloud/';
+
 // DOM 요소
 const startScreen = document.getElementById('startScreen');
 const quizScreen = document.getElementById('quizScreen');
@@ -176,6 +178,7 @@ const resultScreen = document.getElementById('resultScreen');
 const startBtn = document.getElementById('startBtn');
 const restartBtn = document.getElementById('restartBtn');
 const shareBtn = document.getElementById('shareBtn');
+const moreTestsBtn = document.getElementById('moreTestsBtn');
 const questionText = document.getElementById('questionText');
 const choicesContainer = document.getElementById('choicesContainer');
 const progressBar = document.getElementById('progressBar');
@@ -220,6 +223,13 @@ shareBtn.addEventListener('click', () => {
     fallbackCopyText(shareText);
   }
 });
+
+// 더 많은 테스트 해보기 버튼 클릭
+if (moreTestsBtn) {
+  moreTestsBtn.addEventListener('click', () => {
+    window.open(MORE_TESTS_URL, '_blank', 'noopener');
+  });
+}
 
 // 폴백 복사 함수
 function fallbackCopyText(text) {
@@ -329,4 +339,3 @@ function showResult() {
   url.searchParams.set('result', mbtiType);
   window.history.pushState({}, '', url);
 }
-
