@@ -171,6 +171,112 @@ let scores = {
 
 const MORE_TESTS_URL = 'https://funnyfunny.cloud/';
 
+/* i18n */
+const translations = {
+  ko: {
+    metaTitle: "나의 주량 MBTI 테스트",
+    metaDescription: "당신의 술자리 성향을 알아보는 재미있는 MBTI 테스트",
+    title: "🍺 나의 주량 MBTI 테스트",
+    subtitle: "당신의 술자리 성향을 알아보는<br />재미있는 테스트입니다",
+    startBtn: "테스트 시작하기",
+    restartBtn: "다시하기",
+    shareBtn: "결과 공유하기",
+    moreTestsBtn: "더 많은 테스트 해보기",
+    progressText: "질문 {current} / {total}",
+    resultMessage: "당신의 술자리 성향을 확인했어요! 🎉"
+  },
+  en: {
+    metaTitle: "My Drinking MBTI Test",
+    metaDescription: "A fun MBTI test to discover your drinking personality",
+    title: "🍺 My Drinking MBTI Test",
+    subtitle: "A fun test to discover<br />your drinking personality",
+    startBtn: "Start Test",
+    restartBtn: "Try Again",
+    shareBtn: "Share Result",
+    moreTestsBtn: "Try More Tests",
+    progressText: "Question {current} / {total}",
+    resultMessage: "Your drinking personality has been confirmed! 🎉"
+  }
+};
+
+const defaultLang = "en";
+const supportedLangs = ["ko", "en"];
+let currentLang = defaultLang;
+
+function t(key, vars = {}) {
+  const langTable = translations[currentLang] || translations.ko;
+  const template = langTable?.[key] ?? translations.ko?.[key] ?? key;
+  if (typeof template !== "string") return template;
+  return template.replace(/\{(\w+)\}/g, (_, token) =>
+    vars[token] !== undefined ? vars[token] : `{${token}}`
+  );
+}
+
+function applyTranslations() {
+  document.title = t("metaTitle");
+  const desc = document.querySelector('meta[name="description"]');
+  if (desc) desc.setAttribute("content", t("metaDescription"));
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    if (el.dataset.i18n === "subtitle") {
+      el.innerHTML = t("subtitle");
+    } else {
+      el.textContent = t(el.dataset.i18n);
+    }
+  });
+}
+
+function setLang(lang, options = {}) {
+  const nextLang = translations[lang] ? lang : defaultLang;
+  currentLang = nextLang;
+  document.documentElement.lang = nextLang;
+  localStorage.setItem("preferredLang", nextLang);
+  document.querySelectorAll(".lang-switch button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.lang === nextLang);
+  });
+  applyTranslations();
+  if (options.updateUrl) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", nextLang);
+    window.history.replaceState({}, "", url);
+  }
+}
+
+function getRegionPreferredLang(fallback = defaultLang) {
+  const intlLocale =
+    typeof Intl === "object" && typeof Intl.DateTimeFormat === "function"
+      ? Intl.DateTimeFormat().resolvedOptions().locale
+      : "";
+  const sources = [
+    ...(navigator.languages || []),
+    navigator.language,
+    navigator.userLanguage,
+    intlLocale,
+  ]
+    .filter(Boolean)
+    .map((locale) => locale.toLowerCase());
+  const hasKorean = sources.some((locale) => locale.startsWith("ko"));
+  return hasKorean ? "ko" : fallback;
+}
+
+function detectLang() {
+  const params = new URLSearchParams(window.location.search);
+  const paramLang = params.get("lang");
+  if (supportedLangs.includes(paramLang)) return paramLang;
+  const stored = localStorage.getItem("preferredLang");
+  if (supportedLangs.includes(stored)) return stored;
+  const candidate = getRegionPreferredLang(defaultLang);
+  return supportedLangs.includes(candidate) ? candidate : defaultLang;
+}
+
+document.querySelectorAll(".lang-switch button").forEach((button) => {
+  button.addEventListener("click", () => {
+    setLang(button.dataset.lang, { updateUrl: true });
+  });
+});
+
+setLang(detectLang(), { updateUrl: false });
+
 // DOM 요소
 const startScreen = document.getElementById('startScreen');
 const quizScreen = document.getElementById('quizScreen');
@@ -267,7 +373,7 @@ function showQuestion(index) {
   // 프로그레스 바 업데이트
   const progress = ((index + 1) / questions.length) * 100;
   progressBar.style.width = `${progress}%`;
-  progressText.textContent = `질문 ${index + 1} / ${questions.length}`;
+  progressText.textContent = t("progressText", { current: index + 1, total: questions.length });
   progressPercent.textContent = `${Math.round(progress)}%`;
   
   // 선택지 렌더링
@@ -330,7 +436,7 @@ function showResult() {
       <p class="text-lg text-gray-700 leading-relaxed">${result.desc}</p>
     </div>
     <div class="text-sm text-gray-500">
-      당신의 술자리 성향을 확인했어요! 🎉
+      ${t("resultMessage")}
     </div>
   `;
   
